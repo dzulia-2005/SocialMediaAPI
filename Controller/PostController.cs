@@ -66,6 +66,18 @@ public class PostController : ControllerBase
 
         return Ok(post.ToPostDto());
     }
+
+    [HttpDelete("delete/{Id:int}")]
+    public async Task<ActionResult> DeletePost([FromRoute] int Id)
+    {
+        var post = await _postRepository.DeletePostAsync(Id);
+        if (post == null)
+        {
+            return NotFound("Post is not found");
+        }
+
+        return Ok(post.ToPostDto());
+    }
     
    
 }

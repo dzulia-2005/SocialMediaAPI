@@ -9,4 +9,5 @@ public interface IPostRepository
     Task<Post> GetPostByIdAsync(int Id);
     Task<Post> CreatePostAsync(CreatePostDto postDto);
     Task<Post> UpdatePostAsync(int Id,UpdatePostDto updatePostDto);
+    Task<Post> DeletePostAsync(int Id);
 }

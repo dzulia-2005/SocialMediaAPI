@@ -65,4 +65,17 @@ public class PostRepository : IPostRepository
         await _Context.SaveChangesAsync();
         return existingPost;
     }
+
+    public async Task<Post> DeletePostAsync(int Id)
+    {
+        var post = await _Context.Posts.FindAsync(Id);
+        if (post==null)
+        {
+            return null;
+        }
+
+        _Context.Posts.Remove(post);
+        await _Context.SaveChangesAsync();
+        return post;
+    }
 }
