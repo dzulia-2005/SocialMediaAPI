@@ -54,6 +54,18 @@ public class PostController : ControllerBase
             return BadRequest(e.Message);
         }
     }
+
+    [HttpPut("update/{Id:int}")]
+    public async Task<ActionResult> UpdatePost([FromRoute] int Id,[FromBody] UpdatePostDto updatePostDto)
+    {
+        var post = await _postRepository.UpdatePostAsync(Id, updatePostDto);
+        if (post == null)
+        {
+            return NotFound("post not found");
+        }
+
+        return Ok(post.ToPostDto());
+    }
     
    
 }

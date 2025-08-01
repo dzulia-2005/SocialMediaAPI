@@ -48,4 +48,21 @@ public class PostRepository : IPostRepository
         await _Context.SaveChangesAsync();
         return post;
     }
+
+    public async Task<Post> UpdatePostAsync(int Id,UpdatePostDto updatePostDto)
+    {
+        var existingPost = await _Context.Posts.FindAsync(Id);
+        if (existingPost==null)
+        {
+            return null;
+        }
+
+        existingPost.Content = updatePostDto.Content;
+        existingPost.imageUrl = updatePostDto.imageUrl;
+        existingPost.UserId = updatePostDto.UserId;
+        existingPost.CreateAt = updatePostDto.CreateAt;
+
+        await _Context.SaveChangesAsync();
+        return existingPost;
+    }
 }
