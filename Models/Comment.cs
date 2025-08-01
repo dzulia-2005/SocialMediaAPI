@@ -1,11 +1,15 @@
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace SocialMediaAPI.Models;
 
+
+[Table("Comments")]
 public class Comment
 {
     public int Id { get; set; }
-    public string Content { get; set; }
+    public string Content { get; set; } = string.Empty;
     
-    public string userId { get; set; }
+    public string UserId { get; set; }
     public User User { get; set; }
     
     public int PostId { get; set; }
