@@ -43,10 +43,6 @@ namespace SocialMediaAPI.Migrations
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
-                    b.Property<string>("userId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("Id");
 
                     b.HasIndex("PostId");
@@ -67,7 +63,7 @@ namespace SocialMediaAPI.Migrations
                     b.Property<DateTime>("CreateAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("ReadAt")
+                    b.Property<DateTime?>("ReadAt")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("User1Id")
@@ -99,24 +95,14 @@ namespace SocialMediaAPI.Migrations
                     b.Property<int>("FollowedUserId")
                         .HasColumnType("int");
 
-                    b.Property<int>("FollowerId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("UserId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("UserId1")
+                    b.Property<int>("FollowerUserId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("FollowedUserId");
 
-                    b.HasIndex("FollowerId");
-
-                    b.HasIndex("UserId");
-
-                    b.HasIndex("UserId1");
+                    b.HasIndex("FollowerUserId");
 
                     b.ToTable("Followers");
                 });
@@ -135,14 +121,14 @@ namespace SocialMediaAPI.Migrations
                     b.Property<int>("PostId")
                         .HasColumnType("int");
 
-                    b.Property<int>("userId")
+                    b.Property<int>("UserId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("PostId");
 
-                    b.HasIndex("userId");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Likes");
                 });
@@ -161,8 +147,8 @@ namespace SocialMediaAPI.Migrations
                     b.Property<bool>("IsRead")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("ReadAt")
-                        .HasColumnType("bit");
+                    b.Property<DateTime?>("ReadAt")
+                        .HasColumnType("datetime2");
 
                     b.Property<DateTime>("SendAt")
                         .HasColumnType("datetime2");
@@ -230,6 +216,7 @@ namespace SocialMediaAPI.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("imageUrl")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -282,7 +269,7 @@ namespace SocialMediaAPI.Migrations
                     b.HasOne("SocialMediaAPI.Models.User", "User")
                         .WithMany("Comments")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Post");
@@ -295,13 +282,13 @@ namespace SocialMediaAPI.Migrations
                     b.HasOne("SocialMediaAPI.Models.User", "User1")
                         .WithMany()
                         .HasForeignKey("User1Id")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("SocialMediaAPI.Models.User", "User2")
                         .WithMany()
                         .HasForeignKey("User2Id")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("User1");
@@ -312,24 +299,16 @@ namespace SocialMediaAPI.Migrations
             modelBuilder.Entity("SocialMediaAPI.Models.Follower", b =>
                 {
                     b.HasOne("SocialMediaAPI.Models.User", "FollowedUser")
-                        .WithMany()
+                        .WithMany("Followers")
                         .HasForeignKey("FollowedUserId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("SocialMediaAPI.Models.User", "FollowerUser")
-                        .WithMany()
-                        .HasForeignKey("FollowerId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("SocialMediaAPI.Models.User", null)
-                        .WithMany("Followers")
-                        .HasForeignKey("UserId");
-
-                    b.HasOne("SocialMediaAPI.Models.User", null)
                         .WithMany("Following")
-                        .HasForeignKey("UserId1");
+                        .HasForeignKey("FollowerUserId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
 
                     b.Navigation("FollowedUser");
 
@@ -341,13 +320,13 @@ namespace SocialMediaAPI.Migrations
                     b.HasOne("SocialMediaAPI.Models.Post", "Post")
                         .WithMany("Likes")
                         .HasForeignKey("PostId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("SocialMediaAPI.Models.User", "User")
                         .WithMany("Likes")
-                        .HasForeignKey("userId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Post");
@@ -364,9 +343,9 @@ namespace SocialMediaAPI.Migrations
                         .IsRequired();
 
                     b.HasOne("SocialMediaAPI.Models.User", "Sender")
-                        .WithMany()
+                        .WithMany("SentMessages")
                         .HasForeignKey("SenderId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Conversation");
@@ -377,7 +356,7 @@ namespace SocialMediaAPI.Migrations
             modelBuilder.Entity("SocialMediaAPI.Models.Notification", b =>
                 {
                     b.HasOne("SocialMediaAPI.Models.User", "User")
-                        .WithMany()
+                        .WithMany("Notifications")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -418,7 +397,11 @@ namespace SocialMediaAPI.Migrations
 
                     b.Navigation("Likes");
 
+                    b.Navigation("Notifications");
+
                     b.Navigation("Posts");
+
+                    b.Navigation("SentMessages");
                 });
 #pragma warning restore 612, 618
         }

@@ -16,6 +16,6 @@ public class Conversation
     public List<Message> Messages { get; set; }
     
     public DateTime CreateAt { get; set; } = DateTime.UtcNow;
-    public DateTime ReadAt { get; set; }
+    public DateTime? ReadAt { get; set; }
     
 }

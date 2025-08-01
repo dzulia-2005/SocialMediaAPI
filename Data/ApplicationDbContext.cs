@@ -20,33 +20,33 @@ public class ApplicationDbContext : DbContext
         
     }
 
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
+   protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
-        
+
         modelBuilder.Entity<Follower>()
             .HasOne(f => f.FollowerUser)
-            .WithMany()
-            .HasForeignKey(f=>f.FollowerUserId)
-            .OnDelete(DeleteBehavior.Restrict);
+            .WithMany(f => f.Following)
+            .HasForeignKey(f => f.FollowerUserId)
+            .OnDelete(DeleteBehavior.NoAction);
 
         modelBuilder.Entity<Follower>()
             .HasOne(f => f.FollowedUser)
-            .WithMany()
+            .WithMany(f => f.Followers)
             .HasForeignKey(f => f.FollowedUserId)
-            .OnDelete(DeleteBehavior.Restrict);
-
+            .OnDelete(DeleteBehavior.NoAction);
+        
         modelBuilder.Entity<Conversation>()
             .HasOne(f => f.User1)
             .WithMany()
             .HasForeignKey(f => f.User1Id)
-            .OnDelete(DeleteBehavior.Restrict);
+            .OnDelete(DeleteBehavior.NoAction);
 
         modelBuilder.Entity<Conversation>()
             .HasOne(f => f.User2)
             .WithMany()
             .HasForeignKey(f => f.User2Id)
-            .OnDelete(DeleteBehavior.Restrict);
+            .OnDelete(DeleteBehavior.NoAction);
 
         modelBuilder.Entity<Post>()
             .HasOne(p => p.User)
@@ -61,32 +61,34 @@ public class ApplicationDbContext : DbContext
             .HasOne(l => l.User)
             .WithMany(l => l.Likes)
             .HasForeignKey(l => l.UserId)
-            .OnDelete(DeleteBehavior.Cascade);
+            .OnDelete(DeleteBehavior.NoAction);
 
         modelBuilder.Entity<Like>()
             .HasOne(l => l.Post)
             .WithMany(l => l.Likes)
             .HasForeignKey(l => l.PostId)
-            .OnDelete(DeleteBehavior.Cascade);
+            .OnDelete(DeleteBehavior.NoAction);
 
+        
         modelBuilder.Entity<Notification>()
             .HasOne(n => n.User)
             .WithMany(n => n.Notifications)
             .HasForeignKey(n => n.UserId)
             .OnDelete(DeleteBehavior.Cascade);
 
+        
         modelBuilder.Entity<Comment>()
-            .HasOne(p => p.Post)
+            .HasOne(c => c.Post)
             .WithMany(p => p.Comments)
-            .HasForeignKey(p => p.PostId)
+            .HasForeignKey(c => c.PostId)
             .OnDelete(DeleteBehavior.Cascade);
 
         modelBuilder.Entity<Comment>()
             .HasOne(c => c.User)
             .WithMany(c => c.Comments)
             .HasForeignKey(c => c.UserId)
-            .OnDelete(DeleteBehavior.Cascade);
-
+            .OnDelete(DeleteBehavior.NoAction);
+        
         modelBuilder.Entity<Message>()
             .HasOne(m => m.Conversation)
             .WithMany(m => m.Messages)
@@ -97,7 +99,6 @@ public class ApplicationDbContext : DbContext
             .HasOne(m => m.Sender)
             .WithMany(m => m.SentMessages)
             .HasForeignKey(m => m.SenderId)
-            .OnDelete(DeleteBehavior.Cascade);
-
+            .OnDelete(DeleteBehavior.NoAction);
     }
 }

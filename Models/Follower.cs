@@ -6,9 +6,12 @@ namespace SocialMediaAPI.Models;
 public class Follower
 {
     public int Id { get; set; }
+    
+    [ForeignKey(nameof(FollowerUser))]
     public int FollowerUserId { get; set; }
     public User FollowerUser { get; set; }
     
+    [ForeignKey(nameof(FollowedUser))]
     public int FollowedUserId { get; set; }
     public User FollowedUser { get; set; }
     
