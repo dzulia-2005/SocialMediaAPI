@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SocialMediaAPI.Data;
+using SocialMediaAPI.Interfaces;
+using SocialMediaAPI.Mappers;
 using SocialMediaAPI.Models;
 
 namespace SocialMediaAPI.Controller;
@@ -10,32 +12,33 @@ namespace SocialMediaAPI.Controller;
 [Route("api/post")]
 public class PostController : ControllerBase
 {
-    private readonly ApplicationDbContext _context;
+    private readonly IPostRepository _postRepository;
 
-    public PostController(ApplicationDbContext context)
+    public PostController(IPostRepository postRepository)
     {
-        _context = context;
+        _postRepository = postRepository;
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<Post>>> GetPosts()
+    public async Task<ActionResult> GetPosts()
     {
-        var posts = await _context.Posts
-            .Include(p => p.User)
-            .ToListAsync();
+        var posts = await _postRepository.GetPostsAsync();
+        var postdto = posts.Select(s=>s.ToPostDto());
 
-        return Ok(posts);
+        return Ok(postdto);
     }
 
     [HttpGet("{id:int}")]
-    public async Task<ActionResult<Post>> GetPostById(int id)
+    public async Task<ActionResult> GetPostById([FromRoute] int Id)
     {
-        var posts = await _context.Posts.FindAsync(id);
-        if (posts == null)
+        var post = await _postRepository.GetPostByIdAsync(Id);
+        if (post == null)
         {
             return NotFound();
         }
 
-        return Ok(posts);
+        return Ok(post.ToPostDto());
     }
+    
+   
 }

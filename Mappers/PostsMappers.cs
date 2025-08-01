@@ -5,7 +5,7 @@ namespace SocialMediaAPI.Mappers;
 
 public static class  PostsMappers
 {
-    public static PostDto ToStockDto(this Post postmodel)
+    public static PostDto ToPostDto(this Post postmodel)
     {
         return new PostDto
         {
