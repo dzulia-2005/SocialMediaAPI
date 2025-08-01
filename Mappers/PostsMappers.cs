@@ -17,5 +17,16 @@ public static class  PostsMappers
             Likes = postmodel.Likes.Select(s=>s.LikeToDto()).ToList()
             
         };
-    } 
+    }
+
+    public static Post ToPostFromPostDto(this CreatePostDto postmodel)
+    {
+        return new Post
+        {
+            UserId = postmodel.UserId,
+            Content = postmodel.Content,
+            CreateAt = postmodel.CreateAt,
+            imageUrl = postmodel.imageUrl,
+        };
+    }
 }

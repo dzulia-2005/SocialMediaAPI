@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using SocialMediaAPI.Data;
+using SocialMediaAPI.Dtos.Posts;
 using SocialMediaAPI.Interfaces;
 using SocialMediaAPI.Models;
 
@@ -23,6 +24,28 @@ public class PostRepository : IPostRepository
     public async Task<Post> GetPostByIdAsync(int Id)
     {
         var post = await _Context.Posts.FindAsync(Id);
+        return post;
+    }
+
+    public async Task<Post> CreatePostAsync(CreatePostDto postDto)
+    {
+        var user = await _Context.Users.FindAsync(postDto.UserId);
+        if (user==null)
+        {
+            throw new Exception("user not found");
+        }
+
+        var post = new Post
+        {
+            Content = postDto.Content,
+            imageUrl = postDto.imageUrl,
+            UserId = postDto.UserId,
+            CreateAt = postDto.CreateAt,
+            User = user,
+        };
+
+        _Context.Posts.Add(post);
+        await _Context.SaveChangesAsync();
         return post;
     }
 }

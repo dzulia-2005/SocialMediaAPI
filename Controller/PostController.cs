@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SocialMediaAPI.Data;
+using SocialMediaAPI.Dtos.Posts;
 using SocialMediaAPI.Interfaces;
 using SocialMediaAPI.Mappers;
 using SocialMediaAPI.Models;
@@ -28,7 +29,7 @@ public class PostController : ControllerBase
         return Ok(postdto);
     }
 
-    [HttpGet("{id:int}")]
+    [HttpGet("{Id:int}")]
     public async Task<ActionResult> GetPostById([FromRoute] int Id)
     {
         var post = await _postRepository.GetPostByIdAsync(Id);
@@ -38,6 +39,20 @@ public class PostController : ControllerBase
         }
 
         return Ok(post.ToPostDto());
+    }
+
+    [HttpPost]
+    public async Task<ActionResult> CreatePost([FromBody] CreatePostDto postDto)
+    {
+        try
+        {
+            var createdPost = await _postRepository.CreatePostAsync(postDto);
+            return CreatedAtAction(nameof(GetPostById), new { Id = createdPost.Id }, createdPost);
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
+        }
     }
     
    
