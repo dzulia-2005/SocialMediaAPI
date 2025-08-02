@@ -7,6 +7,8 @@ using SocialMediaAPI.Models;
 
 namespace SocialMediaAPI.Controller;
 
+[ApiController]
+[Route("api/comments")]
 public class CommentController : ControllerBase
 {
     private readonly ICommentRepository _commentRepository;
