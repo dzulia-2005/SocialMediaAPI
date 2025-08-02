@@ -21,7 +21,7 @@ public class PostController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult> GetPosts()
+    public async Task<IActionResult> GetPosts()
     {
         var posts = await _postRepository.GetPostsAsync();
         var postdto = posts.Select(s=>s.ToPostDto());
@@ -30,7 +30,7 @@ public class PostController : ControllerBase
     }
 
     [HttpGet("{Id:int}")]
-    public async Task<ActionResult> GetPostById([FromRoute] int Id)
+    public async Task<IActionResult> GetPostById([FromRoute] int Id)
     {
         var post = await _postRepository.GetPostByIdAsync(Id);
         if (post == null)
@@ -42,7 +42,7 @@ public class PostController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult> CreatePost([FromBody] CreatePostDto postDto)
+    public async Task<IActionResult> CreatePost([FromBody] CreatePostDto postDto)
     {
         try
         {
@@ -56,7 +56,7 @@ public class PostController : ControllerBase
     }
 
     [HttpPut("update/{Id:int}")]
-    public async Task<ActionResult> UpdatePost([FromRoute] int Id,[FromBody] UpdatePostDto updatePostDto)
+    public async Task<IActionResult> UpdatePost([FromRoute] int Id,[FromBody] UpdatePostDto updatePostDto)
     {
         var post = await _postRepository.UpdatePostAsync(Id, updatePostDto);
         if (post == null)
@@ -68,7 +68,7 @@ public class PostController : ControllerBase
     }
 
     [HttpDelete("delete/{Id:int}")]
-    public async Task<ActionResult> DeletePost([FromRoute] int Id)
+    public async Task<IActionResult> DeletePost([FromRoute] int Id)
     {
         var post = await _postRepository.DeletePostAsync(Id);
         if (post == null)
@@ -76,7 +76,7 @@ public class PostController : ControllerBase
             return NotFound("Post is not found");
         }
 
-        return Ok(post.ToPostDto());
+        return NoContent();
     }
     
    

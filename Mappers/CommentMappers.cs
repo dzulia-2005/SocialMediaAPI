@@ -16,5 +16,27 @@ public static  class CommentMappers
             Content = commentmodel.Content
         };
     }
+
+    public static Comment ToCommentFromCreate(this CreateCommentDto commentmodel,int PostId)
+    {
+        return new Comment
+        {
+            Content = commentmodel.Content,
+            UserId = commentmodel.UserId,
+            PostId = PostId,
+            CreateAt = commentmodel.CreateAt
+        };
+    }
+
+    public static Comment ToCommentFromUpdate(this UpdateCommentDto commentmodel,int Id)
+    {
+        return new Comment
+        {
+            Content = commentmodel.Content,
+            UserId = commentmodel.UserId,
+            PostId = Id,
+            CreateAt = commentmodel.CreateAt
+        };
+    }
     
 }
