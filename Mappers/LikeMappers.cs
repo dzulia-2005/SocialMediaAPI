@@ -15,4 +15,13 @@ public static class LikeMappers
             CreateAt = likemodel.CreateAt
         };
     }
+
+    public static Like LikefromCreateDto(this CreateLikeDto likeDto)
+    {
+        return new Like
+        {
+            UserId = likeDto.UserId,
+            PostId = likeDto.PostId
+        };
+    }
 }
