@@ -39,7 +39,7 @@ public class CommentController : ControllerBase
         return Ok(commentDto);
     }
 
-    [HttpPost("{PostId:int")]
+    [HttpPost("{PostId:int}")]
     public async Task<IActionResult> CreateComment([FromRoute] int PostId, CreateCommentDto commentDto)
     {
         var comentModel = commentDto.ToCommentFromCreate(PostId);
@@ -50,9 +50,20 @@ public class CommentController : ControllerBase
     [HttpPut("{Id:int}")]
     public async Task<IActionResult> UpdateComment([FromRoute] int Id, [FromBody] UpdateCommentDto commentDto)
     {
-        var commentModel = commentDto.ToCommentFromUpdate(Id);
-        commentModel.PostId = Id;
-        commentModel.CreateAt = commentDto.CreateAt;
+        var commentModel = await _commentRepository.UpdateCommentAsync(Id, commentDto.ToCommentFromUpdate());
+        if (commentModel == null)
+        {
+            return NotFound("comment not found");
+        }
+
+        return Ok(commentModel.ToCommentDto());
+    }
+
+    [HttpDelete("{Id:int}")]
+    public async Task<IActionResult> DeleteComment([FromRoute] int Id)
+    {
+        var comment = await _commentRepository.DeleteCommentAsync(Id);
+        return Ok(comment);
     }
     
 } 

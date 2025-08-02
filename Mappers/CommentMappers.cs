@@ -24,18 +24,16 @@ public static  class CommentMappers
             Content = commentmodel.Content,
             UserId = commentmodel.UserId,
             PostId = PostId,
-            CreateAt = commentmodel.CreateAt
+            CreateAt = DateTime.UtcNow
         };
     }
 
-    public static Comment ToCommentFromUpdate(this UpdateCommentDto commentmodel,int Id)
+    public static Comment ToCommentFromUpdate(this UpdateCommentDto commentmodel)
     {
         return new Comment
         {
             Content = commentmodel.Content,
-            UserId = commentmodel.UserId,
-            PostId = Id,
-            CreateAt = commentmodel.CreateAt
+            CreateAt = DateTime.UtcNow
         };
     }
     
