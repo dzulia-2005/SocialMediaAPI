@@ -26,7 +26,7 @@ public class NotificationRepository : INotificationRepository
     }
 
 
-    public async Task<Notification> CreateNotification(NotificationDto dto)
+    public async Task<Notification> CreateNotification(CreateNotificationDto dto)
     {
         var notification = dto.NotficationFromCreateDto();
         await _context.Notifications.AddAsync(notification);

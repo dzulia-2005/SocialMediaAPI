@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using SocialMediaAPI.Dtos.Notification;
 using SocialMediaAPI.Interfaces;
+using SocialMediaAPI.Mappers;
 
 namespace SocialMediaAPI.Controller;
 [ApiController]
@@ -18,21 +19,14 @@ public class NotificationController : ControllerBase
     public async Task<IActionResult> GetUserNotfication([FromRoute] int userId)
     {
         var notification = await _notificationRepository.GetNotificationByUserIdAsync(userId);
-        var dtoList = notification.Select(n => new NotificationDto
-        {
-            Id = n.Id,
-            Message = n.Message,
-            IsRead = n.IsRead,
-            CreateAt = n.CreateAt
-        });
-
+        var dtoList = notification.Select(n => n.ToNotificationDto());
         return Ok(dtoList);
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateNotification([FromBody] NotificationDto dto)
+    public async Task<IActionResult> CreateNotification([FromBody] CreateNotificationDto dto)
     {
         var notification = _notificationRepository.CreateNotification(dto);
-        return CreatedAtAction(nameof(GetUserNotfication), new { userId = dto.Id }, notification);
+        return CreatedAtAction(nameof(GetUserNotfication), new { userId = dto.UserId }, notification);
     }
 }

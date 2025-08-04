@@ -7,5 +7,5 @@ public interface INotificationRepository
 {
     Task<List<Notification>> GetNotificationByUserIdAsync(int UserId);
     
-    Task<Notification> CreateNotification(NotificationDto dto);
+    Task<Notification> CreateNotification(CreateNotificationDto dto);
 }
