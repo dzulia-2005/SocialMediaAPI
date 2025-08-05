@@ -1,10 +1,12 @@
 using System.Reflection;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using SocialMediaAPI.Models;
 
 namespace SocialMediaAPI.Data;
 
-public class ApplicationDbContext : DbContext 
+public class ApplicationDbContext : IdentityDbContext<User> 
 {
     public DbSet<User> Users { get; set; }
     public DbSet<Post> Posts { get; set; }
@@ -100,5 +102,20 @@ public class ApplicationDbContext : DbContext
             .WithMany(m => m.SentMessages)
             .HasForeignKey(m => m.SenderId)
             .OnDelete(DeleteBehavior.NoAction);
+
+        List<IdentityRole> roles = new List<IdentityRole>
+        {
+            new IdentityRole
+            {
+                Name = "admin",
+                NormalizedName = "ADMIN"
+            },
+            new IdentityRole
+            {
+                Name = "user",
+                NormalizedName = "USER"
+            }
+        };
+        modelBuilder.Entity<IdentityRole>().HasData(roles);
     }
 }

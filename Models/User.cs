@@ -1,6 +1,8 @@
+using Microsoft.AspNetCore.Identity;
+
 namespace SocialMediaAPI.Models;
 
-public class User
+public class User : IdentityUser
 {
     public int Id { get; set; }
     public string UserName { get; set; } = string.Empty;
