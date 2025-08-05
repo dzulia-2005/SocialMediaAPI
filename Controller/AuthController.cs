@@ -1,0 +1,95 @@
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using SocialMediaAPI.Dtos.Auth;
+using SocialMediaAPI.Models;
+
+namespace SocialMediaAPI.Controller;
+[ApiController]
+[Route("api/auth")]
+public class AuthController : ControllerBase
+{
+    private readonly UserManager<User> _userManager;
+    private readonly SignInManager<User> _signInManager;
+
+    public AuthController(SignInManager<User> signInManager, UserManager<User> userManager)
+    {
+        _userManager = userManager;
+        _signInManager = signInManager;
+    }
+
+    [Route("login")]
+    [HttpPost]
+    public async Task<IActionResult> Login([FromBody] LoginDto loginDto)
+    {
+        try
+        {
+            var user = await _userManager.Users.FirstOrDefaultAsync(x => x.UserName == loginDto.UserName);
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+
+            var result = await _signInManager.CheckPasswordSignInAsync(user, loginDto.Password, false);
+            if (!result.Succeeded)
+            {
+                return Unauthorized("password or username is invalid");
+            }
+
+            return Ok(
+                new NewUserDto
+                {
+                    UserName = user.UserName,
+                    mail = user.Email
+                }
+            );
+
+        }
+        catch (Exception e)
+        {
+            return StatusCode(500, e);
+        }
+    }
+
+    [Route("register")]
+    [HttpPost]
+    public async Task<IActionResult> Register([FromBody] RegisterDto registerdto)
+    {
+        try
+        {
+            var user = new User
+            {
+                UserName = registerdto.UserName,
+                Email = registerdto.mail
+            };
+
+            var createdUser = await _userManager.CreateAsync(user, registerdto.Password);
+            if (createdUser.Succeeded)
+            {
+                var RoleResult = await _userManager.AddToRoleAsync(user, "User");
+                if (RoleResult.Succeeded)
+                {
+                    return Ok(
+                        new NewUserDto
+                        {
+                            UserName = user.UserName,
+                            mail = user.Email,
+                        }
+                    );
+                }
+                else
+                {
+                    return StatusCode(500, RoleResult.Errors);
+                }
+            }
+            else
+            {
+                return StatusCode(500, createdUser.Succeeded);
+            }
+        }
+        catch (Exception e)
+        {
+           return StatusCode(500, e);
+        }
+    }
+}
