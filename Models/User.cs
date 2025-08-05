@@ -19,5 +19,7 @@ public class User : IdentityUser
     public List<Follower> Following { get; set; }=  new List<Follower>();
     public List<Message> SentMessages { get; set; } = new List<Message>();
     
+    public string? RefreshToken { get; set; }
+    public DateTime RefreshTokenExpiry { get; set; }
     public DateTime CreateAt { get; set; } = DateTime.UtcNow;
 }

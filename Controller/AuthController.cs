@@ -1,7 +1,9 @@
 using System.Security.Claims;
+using Azure.Core;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using SocialMediaAPI.Data;
 using SocialMediaAPI.Dtos.Auth;
 using SocialMediaAPI.Interfaces;
 using SocialMediaAPI.Models;
@@ -14,12 +16,14 @@ public class AuthController : ControllerBase
     private readonly UserManager<User> _userManager;
     private readonly SignInManager<User> _signInManager;
     private readonly ITokenServices _services;
+    private readonly ApplicationDbContext _context;
 
-    public AuthController(SignInManager<User> signInManager, UserManager<User> userManager,ITokenServices services)
+    public AuthController(SignInManager<User> signInManager, UserManager<User> userManager,ITokenServices services,ApplicationDbContext context)
     {
         _userManager = userManager;
         _signInManager = signInManager;
         _services = services;
+        _context = context;
     }
 
     [Route("login")]
@@ -125,5 +129,26 @@ public class AuthController : ControllerBase
         };
 
         return Ok(userDto);
+    }
+
+    [HttpPost("refresh")]
+    public async Task<IActionResult> Refresh([FromBody] RefreshTokenRequest refreshRequest)
+    {
+        var user = await _context.Users.FirstOrDefaultAsync(x => x.RefreshToken == refreshRequest.RefreshToken);
+        if (user == null || user.RefreshTokenExpiry > DateTime.UtcNow )
+        {
+            return Unauthorized("invalid or expired refresh token ");
+        }
+
+        var NewAccessToken = _services.CreateToken(user);
+        var NewRefreshToken = _services.GenerateandSaveRefreshToken(user);
+
+        return Ok(
+            new
+            {
+                AccessToken = NewAccessToken,
+                RefreshToken = NewRefreshToken
+            }
+        );
     }
 }
