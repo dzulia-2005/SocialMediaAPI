@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -91,5 +92,33 @@ public class AuthController : ControllerBase
         {
            return StatusCode(500, e);
         }
+    }
+
+    [HttpGet("me")]
+    public async Task<IActionResult> Me()
+    {
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (userId==null)
+        {
+            return Unauthorized("user is not found");
+        }
+
+        var user = await _userManager.FindByIdAsync(userId);
+        if (user == null)
+        {
+            return Unauthorized("user is not found");
+        }
+
+        var userDto = new
+        {
+            Id = user.Id,
+            UserName = user.UserName,
+            mail = user.Email,
+            ProfilePicture = user.ProfilePicture,
+            Bio = user.Bio,
+            CreateAt = user.CreateAt,
+        };
+
+        return Ok(userDto);
     }
 }
