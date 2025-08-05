@@ -4,5 +4,6 @@ public class NewUserDto
 {
     public string UserName { get; set; }
     public string mail { get; set; }
-    public string password { get; set; }
+    public string AccessToken { get; set; }
+    
 }

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SocialMediaAPI.Dtos.Auth;
+using SocialMediaAPI.Interfaces;
 using SocialMediaAPI.Models;
 
 namespace SocialMediaAPI.Controller;
@@ -12,11 +13,13 @@ public class AuthController : ControllerBase
 {
     private readonly UserManager<User> _userManager;
     private readonly SignInManager<User> _signInManager;
+    private readonly ITokenServices _services;
 
-    public AuthController(SignInManager<User> signInManager, UserManager<User> userManager)
+    public AuthController(SignInManager<User> signInManager, UserManager<User> userManager,ITokenServices services)
     {
         _userManager = userManager;
         _signInManager = signInManager;
+        _services = services;
     }
 
     [Route("login")]
@@ -41,7 +44,8 @@ public class AuthController : ControllerBase
                 new NewUserDto
                 {
                     UserName = user.UserName,
-                    mail = user.Email
+                    mail = user.Email,
+                    AccessToken = _services.CreateToken(user)
                 }
             );
 
@@ -75,6 +79,7 @@ public class AuthController : ControllerBase
                         {
                             UserName = user.UserName,
                             mail = user.Email,
+                            AccessToken = _services.CreateToken(user)
                         }
                     );
                 }
