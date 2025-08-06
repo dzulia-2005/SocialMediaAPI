@@ -151,4 +151,11 @@ public class AuthController : ControllerBase
             }
         );
     }
+
+    [HttpPost("logout")]
+    public async Task<IActionResult> LogOut()
+    {
+        await _signInManager.SignOutAsync();
+        return Ok(new {message = "Signed out successfully"});
+    }
 }
