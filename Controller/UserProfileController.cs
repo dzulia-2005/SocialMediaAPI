@@ -1,4 +1,6 @@
+using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
+using SocialMediaAPI.Dtos.UserProfile;
 using SocialMediaAPI.Interfaces;
 using SocialMediaAPI.Models;
 
@@ -15,9 +17,11 @@ public class UserProfileController : ControllerBase
     }
 
     [HttpPut("UpdateProfile")]
-    public async Task<IActionResult> UpdateProfile(User user)
+    public async Task<IActionResult> UpdateProfile([FromBody] UpdateProfileDto dto)
     {
-        var ExistUser = await _userProfileRepository.UpdateProfileAsync(user);
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        
+        var ExistUser = await _userProfileRepository.UpdateProfileAsync(userId,dto);
         if (ExistUser==null)
         {
             return Unauthorized();

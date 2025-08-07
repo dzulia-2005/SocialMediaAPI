@@ -2,11 +2,12 @@ using System.Reflection;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using SocialMediaAPI.Models;
 
 namespace SocialMediaAPI.Data;
 
-public class ApplicationDbContext : IdentityDbContext<User> 
+public class ApplicationDbContext : IdentityDbContext<User,IdentityRole<int>,int> 
 {
     public DbSet<User> Users { get; set; }
     public DbSet<Post> Posts { get; set; }
@@ -17,11 +18,16 @@ public class ApplicationDbContext : IdentityDbContext<User>
     public DbSet<Follower> Followers { get; set; }
     public DbSet<Conversation> Conversations { get; set; }
     
-    public ApplicationDbContext(DbContextOptions dbContextOptions) : base(dbContextOptions)
+    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> dbContextOptions) : base(dbContextOptions)
     {
         
     }
 
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        optionsBuilder.ConfigureWarnings(warnings => 
+            warnings.Ignore(RelationalEventId.PendingModelChangesWarning));
+    }
    protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);

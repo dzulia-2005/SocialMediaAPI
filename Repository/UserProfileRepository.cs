@@ -1,4 +1,5 @@
 using SocialMediaAPI.Data;
+using SocialMediaAPI.Dtos.UserProfile;
 using SocialMediaAPI.Interfaces;
 using SocialMediaAPI.Models;
 
@@ -13,9 +14,9 @@ public class UserProfileRepository : IUserProfileRepository
         _context = context;
     }
     
-    public async Task<User> UpdateProfileAsync(User user)
+    public async Task<User?> UpdateProfileAsync(string userId,UpdateProfileDto user)
     {
-        var existUser = await _context.Users.FindAsync(user.Id);
+        var existUser = await _context.Users.FindAsync(userId);
         if (user==null)
         {
             return null;

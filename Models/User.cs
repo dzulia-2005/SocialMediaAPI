@@ -2,9 +2,8 @@ using Microsoft.AspNetCore.Identity;
 
 namespace SocialMediaAPI.Models;
 
-public class User : IdentityUser
+public class User : IdentityUser<int>
 {
-    public int Id { get; set; }
     public string UserName { get; set; } = string.Empty;
     public string Email { get; set; } = string.Empty;
     public string Bio { get; set; } = string.Empty;
