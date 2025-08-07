@@ -7,6 +7,7 @@ using SocialMediaAPI.Data;
 using SocialMediaAPI.Interfaces;
 using SocialMediaAPI.Models;
 using SocialMediaAPI.Repository;
+using SocialMediaAPI.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,6 +30,7 @@ builder.Services.AddScoped<IFollowerRepository, FollowerRepository>();
 builder.Services.AddScoped<IConversationRepository,ConversationRepository>();
 builder.Services.AddScoped<IMessageRepository, MessageRepository>();
 builder.Services.AddScoped<IUserProfileRepository,UserProfileRepository>();
+builder.Services.AddScoped<ITokenServices,TokenServices>();
 
 builder.Services.AddSwaggerGen(option =>
 {
