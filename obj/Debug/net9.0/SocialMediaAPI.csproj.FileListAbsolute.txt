@@ -159,3 +159,6 @@
 /Users/Nikoloz/Desktop/SocialMediaAPI/obj/Debug/net9.0/SocialMediaAPI.pdb
 /Users/Nikoloz/Desktop/SocialMediaAPI/obj/Debug/net9.0/SocialMediaAPI.genruntimeconfig.cache
 /Users/Nikoloz/Desktop/SocialMediaAPI/obj/Debug/net9.0/ref/SocialMediaAPI.dll
+/Users/Nikoloz/Desktop/SocialMediaAPI/bin/Debug/net9.0/Microsoft.AspNetCore.JsonPatch.dll
+/Users/Nikoloz/Desktop/SocialMediaAPI/bin/Debug/net9.0/Microsoft.AspNetCore.Mvc.NewtonsoftJson.dll
+/Users/Nikoloz/Desktop/SocialMediaAPI/bin/Debug/net9.0/Newtonsoft.Json.Bson.dll
