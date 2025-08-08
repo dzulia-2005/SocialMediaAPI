@@ -44,12 +44,14 @@ public class AuthController : ControllerBase
                 return Unauthorized("password or username is invalid");
             }
 
+            var token = _services.CreateToken(user);
+            var refreshToken = await _services.GenerateandSaveRefreshToken(user);
+
             return Ok(
                 new NewUserDto
                 {
-                    UserName = user.UserName,
-                    Email = user.Email,
-                    AccessToken = _services.CreateToken(user)
+                    AccessToken = token,
+                    RefreshToken = refreshToken
                 }
             );
 
@@ -72,6 +74,9 @@ public class AuthController : ControllerBase
                 Email = registerdto.Email
             };
 
+            var accesstoken = _services.CreateToken(user);
+            var refreshToken = await _services.GenerateandSaveRefreshToken(user);
+            
             var createResult = await _userManager.CreateAsync(user, registerdto.Password);
             if (createResult.Succeeded)
             {
@@ -80,9 +85,8 @@ public class AuthController : ControllerBase
                 {
                     return Ok(new NewUserDto
                     {
-                        UserName = user.UserName,
-                        Email = user.Email,
-                        AccessToken = _services.CreateToken(user)
+                        AccessToken = accesstoken,
+                        RefreshToken = refreshToken
                     });
                 }
                 else
