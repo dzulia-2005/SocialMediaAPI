@@ -4,8 +4,6 @@ namespace SocialMediaAPI.Models;
 
 public class User : IdentityUser<int>
 {
-    public string UserName { get; set; } = string.Empty;
-    public string Email { get; set; } = string.Empty;
     public string Bio { get; set; } = string.Empty;
     public string ProfilePicture { get; set; } = string.Empty;
 

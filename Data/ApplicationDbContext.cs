@@ -113,12 +113,12 @@ public class ApplicationDbContext : IdentityDbContext<User,IdentityRole<int>,int
         {
             new IdentityRole
             {
-                Name = "admin",
+                Name = "Admin",
                 NormalizedName = "ADMIN"
             },
             new IdentityRole
             {
-                Name = "user",
+                Name = "User",
                 NormalizedName = "USER"
             }
         };

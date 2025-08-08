@@ -16881,8 +16881,8 @@
 149575571|||0|select|G
 1787153412|||0|select|G
 1803153469|||0|select|G</Grants>
-      <IntrospectionTimestamp>2025-08-07.17:11:27.497</IntrospectionTimestamp>
-      <LastIntrospectionLocalTimestamp>2025-08-07.13:11:27</LastIntrospectionLocalTimestamp>
+      <IntrospectionTimestamp>2025-08-07.19:01:34.613</IntrospectionTimestamp>
+      <LastIntrospectionLocalTimestamp>2025-08-07.15:01:34</LastIntrospectionLocalTimestamp>
       <ObjectId>1</ObjectId>
       <PermissionsCheckSum>7026290343</PermissionsCheckSum>
     </schema>
@@ -16951,7 +16951,7 @@
     <table id="5585" parent="5574" name="AspNetUsers">
       <CreatedTimestamp>2025-08-07.17:11:21.440</CreatedTimestamp>
       <DataRetentionPeriod>-1</DataRetentionPeriod>
-      <ModifiedTimestamp>2025-08-07.17:11:21.573</ModifiedTimestamp>
+      <ModifiedTimestamp>2025-08-08.07:07:40.610</ModifiedTimestamp>
       <ObjectId>583673127</ObjectId>
       <LobDataSpaceId>1</LobDataSpaceId>
     </table>
@@ -17346,16 +17346,14 @@ Name</ColNames>
     <column id="5646" parent="5585" name="Id">
       <NotNull>1</NotNull>
       <Position>1</Position>
-      <SequenceIdentity>1</SequenceIdentity>
+      <SequenceIdentity>1(6)</SequenceIdentity>
       <StoredType>int|0s</StoredType>
     </column>
     <column id="5647" parent="5585" name="UserName">
-      <NotNull>1</NotNull>
       <Position>2</Position>
       <StoredType>nvarchar(256 char)|0s</StoredType>
     </column>
     <column id="5648" parent="5585" name="Email">
-      <NotNull>1</NotNull>
       <Position>3</Position>
       <StoredType>nvarchar(256 char)|0s</StoredType>
     </column>

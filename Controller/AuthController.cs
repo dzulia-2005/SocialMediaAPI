@@ -48,7 +48,7 @@ public class AuthController : ControllerBase
                 new NewUserDto
                 {
                     UserName = user.UserName,
-                    mail = user.Email,
+                    Email = user.Email,
                     AccessToken = _services.CreateToken(user)
                 }
             );
@@ -69,23 +69,21 @@ public class AuthController : ControllerBase
             var user = new User
             {
                 UserName = registerdto.UserName,
-                Email = registerdto.mail
+                Email = registerdto.Email
             };
 
-            var createdUser = await _userManager.CreateAsync(user, registerdto.Password);
-            if (createdUser.Succeeded)
+            var createResult = await _userManager.CreateAsync(user, registerdto.Password);
+            if (createResult.Succeeded)
             {
-                var RoleResult = await _userManager.AddToRoleAsync(user, "User");
+                var RoleResult = await _userManager.AddToRoleAsync(user, "USER");
                 if (RoleResult.Succeeded)
                 {
-                    return Ok(
-                        new NewUserDto
-                        {
-                            UserName = user.UserName,
-                            mail = user.Email,
-                            AccessToken = _services.CreateToken(user)
-                        }
-                    );
+                    return Ok(new NewUserDto
+                    {
+                        UserName = user.UserName,
+                        Email = user.Email,
+                        AccessToken = _services.CreateToken(user)
+                    });
                 }
                 else
                 {
@@ -94,12 +92,12 @@ public class AuthController : ControllerBase
             }
             else
             {
-                return StatusCode(500, createdUser.Succeeded);
+                return StatusCode(500, createResult.Errors);
             }
         }
         catch (Exception e)
         {
-           return StatusCode(500, e);
+            return StatusCode(500, new {error = e.Message,stack = e.StackTrace});
         }
     }
 
